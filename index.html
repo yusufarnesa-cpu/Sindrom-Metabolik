@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Medical Study Companion | Blok Endokrin - Sindrom Metabolik</title>
+    <!-- Google Fonts & Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        medical: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .smooth-scroll { scroll-behavior: smooth; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-track { background: #1e293b; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-900 dark:text-slate-100 smooth-scroll transition-colors duration-300">
+
+    <!-- Sticky Navigation Bar -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="bg-medical-600 text-white p-2 rounded-xl font-bold text-lg shadow-md">🩺</span>
+                <div>
+                    <h1 class="text-sm font-bold tracking-tight text-slate-900 dark:text-white">MED-COMPANION <span class="text-medical-600">ENDOCRINE</span></h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Blok Endokrin & Metabolik - Modul Sindrom Metabolik</p>
+                </div>
+            </div>
+
+            <!-- Search Bar & Progress -->
+            <div class="flex items-center space-x-4 flex-1 max-w-md mx-auto">
+                <div class="relative w-full">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">🔍</span>
+                    <input type="text" id="searchInput" placeholder="Cari materi, patofisiologi, kriteria..." class="w-full pl-10 pr-4 py-1.5 text-sm bg-slate-100 dark:bg-slate-700/50 border border-transparent dark:border-slate-600 rounded-lg focus:outline-none focus:border-medical-500 dark:text-white placeholder-slate-400">
+                </div>
+            </div>
+
+            <!-- Controls (Theme & Progress Indicator) -->
+            <div class="flex items-center space-x-3">
+                <div class="hidden md:block text-xs font-medium text-slate-600 dark:text-slate-300">
+                    Progress: <span id="progressText" class="font-bold text-medical-600">0%</span>
+                </div>
+                <button onclick="toggleDarkMode()" id="themeToggle" class="p-2 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition">
+                    Mode
+                </button>
+            </div>
+        </div>
+        <div class="w-full bg-slate-200 dark:bg-slate-700 h-1">
+            <div id="progressBar" class="bg-medical-600 h-1 w-0 transition-all duration-300"></div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 lg:grid-cols-4 gap-8">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block lg:col-span-1 space-y-6">
+            <div class="sticky top-24 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
+                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Daftar Isi Materi</h3>
+                <nav class="space-y-1 text-sm">
+                    <a href="#overview" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">1. Overview & Paradoks Demografi</a>
+                    <a href="#core-theory" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">2. Core Theory (Definisi - Prognosis)</a>
+                    <a href="#pathophysiology" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">3. Patofisiologi & Efek Domino</a>
+                    <a href="#quiz-section" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">4. Latihan 10 Soal Ujian</a>
+                    <a href="#quick-review" class="block px-3 py-2 rounded-lg hover:bg-medical-50 dark:hover:bg-slate-700 hover:text-medical-600 font-medium transition">5. Quick Review (5 Menit)</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="lg:col-span-3 space-y-8 searchable-content">
+
+            <!-- 1. COVER / TITLE & PARADOKS DEMOGRAFI -->
+            <section id="overview" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <div>
+                        <span class="bg-medical-100 text-medical-800 dark:bg-medical-900/50 dark:text-medical-300 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Topik Utama Endokrin & Metabolik</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mt-2">Sindrom Metabolik: Prevalensi & Distribusi Lemak Tubuh</h2>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Blok Endokrin & Metabolik • Modul Komprehensif Kedokteran</p>
+                    </div>
+                    <div class="bg-slate-100 dark:bg-slate-700/50 p-4 rounded-xl text-right">
+                        <span class="text-xs text-slate-500 dark:text-slate-400 block">Status Belajar</span>
+                        <span class="text-sm font-bold text-medical-600">High-Yield Exam Topic</span>
+                    </div>
+                </div>
+
+                <!-- Learning Objectives Checklist -->
+                <div class="bg-slate-50 dark:bg-slate-700/30 p-5 rounded-xl border border-slate-100 dark:border-slate-700">
+                    <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-3">Target Pembelajaran (Checklist Belajar):</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Memahami 5 pilar anatomi risiko sindrom metabolik</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Menguasai evolusi konsensus diagnosis (WHO, NCEP ATP III, IDF)</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Menganalisis patogenesis resistensi insulin, inflamasi, dan genetik</span></label>
+                        <label class="flex items-center space-x-2 cursor-pointer"><input type="checkbox" class="rounded text-medical-600 focus:ring-medical-500"> <span>Memahami efek domino organ target dan tatalaksana komprehensif</span></label>
+                    </div>
+                </div>
+
+                <!-- Paradoks Demografi & Prevalensi -->
+                <div class="border-l-4 border-medical-500 bg-medical-50/50 dark:bg-slate-700/20 p-5 rounded-r-xl space-y-3">
+                    <h4 class="font-bold text-medical-800 dark:text-medical-400">Paradoks Demografi: Prevalensi Etnis & Dimorfisme Gender</h4>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                        Fakta makro menunjukkan prevalensi total sindrom metabolik di Indonesia mencapai <b>39.0%</b>, secara signifikan melampaui populasi di Belanda yang sebesar <b>29.2%</b>. Krisis utama terjadi pada wanita Indonesia dengan prevalensi tertinggi (46.2%), digerakkan oleh tingkat ekstrem obesitas abdominal (57.5%) dan kolesterol HDL rendah (45.3%). Sebaliknya, risiko di Belanda didominasi oleh pria dengan hipertrigliseridemia dan hiperglikemia dua kali lipat lebih tinggi dibanding wanita Belanda.
+                    </p>
+                    <div class="flex flex-wrap gap-2 pt-2">
+                        <span class="bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300 text-xs px-2.5 py-1 rounded-md font-semibold">Risiko DM Tipe 2 naik 5x lipat</span>
+                        <span class="bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 text-xs px-2.5 py-1 rounded-md font-semibold">Risiko Kardiovaskular naik 2x lipat</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. CORE THEORY: SISTEMATIKA KLINIS LENGKAP -->
+            <section id="core-theory" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Core Theory & Clinical Pathway</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-1">Sistematika Klinis Sindrom Metabolik</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- 1. Definisi & Epidemiologi -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-1')" class="w-full flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-700/50 text-left font-bold text-slate-800 dark:text-white text-sm hover:bg-slate-100 transition">
+                            <span>1. Definisi & 5 Pilar Anatomi Risiko (DOHHH)</span>
+                            <span id="icon-acc-1">v</span>
+                        </button>
+                        <div id="acc-1" class="p-4 space-y-3 text-sm text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700">
+                            <p><b>Definisi:</b> Kumpulan kelainan metabolik yang saling terkait dan klsternya secara eksponensial melipatgandakan risiko penyakit kardiovaskular dan diabetes melitus tipe 2.</p>
+                            <p><b>5 Pilar Utama (DOHHH):</b></p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><b>O</b>besitas Sentral: Lingkar pinggang di atas batas etnis.</li>
+                                <li><b>H</b>ipertensi: Peningkatan tekanan darah.</li>
+                                <li><b>H</b>iperglikemia: Glukosa puasa tinggi.</li>
+                                <li><b>H</b>ipertrigliseridemia: Peningkatan trigliserida.</li>
+                                <li><b>H</b>DL Rendah: Penurunan kolesterol HDL.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 2. Evolusi Paradigma Konsensus Diagnosis -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-2')" class="w-full flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-700/50 text-left font-bold text-slate-800 dark:text-white text-sm hover:bg-slate-100 transition">
+                            <span>2. Evolusi Konsensus Diagnosis (WHO vs NCEP ATP III vs IDF)</span>
+                            <span id="icon-acc-2">v</span>
+                        </button>
+                        <div id="acc-2" class="p-4 space-y-3 text-sm text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-xs text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300">
+                                            <th class="p-2">Konsensus</th>
+                                            <th class="p-2">Fokus Utama</th>
+                                            <th class="p-2">Syarat Mutlak</th>
+                                            <th class="p-2">Kriteria Tambahan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
+                                        <tr>
+                                            <td class="p-2 font-medium">WHO (1998)</td>
+                                            <td class="p-2">Penanda resistensi insulin</td>
+                                            <td class="p-2">YA (Resistensi insulin wajib)</td>
+                                            <td class="p-2">Butuh 2 dari kriteria lain</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">NCEP ATP III (2001)</td>
+                                            <td class="p-2">Evaluasi klinis praktis</td>
+                                            <td class="p-2">Tidak ada (setara)</td>
+                                            <td class="p-2">Butuh 3 dari 5 pilar</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2 font-medium">IDF (2005)</td>
+                                            <td class="p-2">Relevansi global & obesitas sentral</td>
+                                            <td class="p-2">YA (Obesitas sentral spesifik etnis wajib)</td>
+                                            <td class="p-2">Butuh 2 dari kriteria lain</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Patofisiologi & Patomekanisme -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-3')" class="w-full flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-700/50 text-left font-bold text-slate-800 dark:text-white text-sm hover:bg-slate-100 transition">
+                            <span>3. Patofisiologi & Patomekanisme</span>
+                            <span id="icon-acc-3">v</span>
+                        </button>
+                        <div id="acc-3" class="p-4 space-y-3 text-sm text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><b>Resistensi Insulin (Motor Utama):</b> Hambatan pada jalur transduksi sinyal PI3K/Akt menghalangi translokasi transporter GLUT4 ke membran plasma sel otot rangka, sehingga glukosa gagal masuk. Kompensasi hiperinsulinemia justru memperburuk kerusakan reseptor.</li>
+                                <li><b>Disfungsi Jaringan Adiposa & Inflamasi:</b> Penurunan adiponektin (pelindung vaskular) dan makrofag M2, serta peningkatan sitokin pro-inflamasi (TNF-alpha, IL-6), makrofag M1, dan Asam Lemak Bebas (FFA) yang memicu lipotoksisitas hati dan otot.</li>
+                                <li><b>Jejak Genetik:</b> Polimorfisme gen ADIPOQ (penurunan adiponektin), varian gen HIF-1alpha Pro582Ser (kerentanan stres ginjal dan kardiovaskular), serta gen LXR dan APOA5 (dislipidemia aterogenik).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 4. Manifestasi Klinik & Efek Domino -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-4')" class="w-full flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-700/50 text-left font-bold text-slate-800 dark:text-white text-sm hover:bg-slate-100 transition">
+                            <span>4. Manifestasi Klinik & Efek Domino Organ Target</span>
+                            <span id="icon-acc-4">v</span>
+                        </button>
+                        <div id="acc-4" class="p-4 space-y-3 text-sm text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li><b>Jantung & Pembuluh Darah:</b> Hambatan nitrat oksida memicu vasokonstriksi (hipertensi); transformasi makrofag menjadi <i>foam cells</i> memicu plak aterosklerosis.</li>
+                                <li><b>Hati (Hepatic):</b> Resistensi insulin mempercepat pengambilan besi hati, mendorong stres oksidatif, steatosis, dan Non-Alcoholic Fatty Liver Disease (NAFLD).</li>
+                                <li><b>Otot Rangka:</b> Gangguan translokasi GLUT4 secara global merusak metabolisme energi seluruh tubuh.</li>
+                                <li><b>Komorbiditas Lain:</b> Memicu PCOS pada wanita muda, <i>sleep apnea</i>, dan peningkatan risiko karsinoma.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5. Tatalaksana & Prognosis -->
+                    <div class="border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
+                        <button onclick="toggleAccordion('acc-5')" class="w-full flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-700/50 text-left font-bold text-slate-800 dark:text-white text-sm hover:bg-slate-100 transition">
+                            <span>5. Tatalaksana Komprehensif & Prognosis</span>
+                            <span id="icon-acc-5">v</span>
+                        </button>
+                        <div id="acc-5" class="p-4 space-y-3 text-sm text-slate-600 dark:text-slate-300 border-t border-slate-200 dark:border-slate-700">
+                            <p><b>Tatalaksana:</b></p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li>Intervensi gaya hidup intensif (modifikasi diet dan peningkatan aktivitas fisik) sebagai lini utama.</li>
+                                <li>Farmakoterapi spesifik untuk masing-masing pilar: sensitizer insulin (metformin), antihipertensi (ACEi/ARB), agen penurun lipid (statina/fibrat).</li>
+                            </ul>
+                            <p><b>Prognosis:</b></p>
+                            <ul class="list-disc pl-5 space-y-1">
+                                <li><b>Ad vitam:</b> Dubia ad malam jika komplikasi kardiovaskular lanjut (infark miokard, stroke) tidak ditangani.</li>
+                                <li><b>Ad sanationam:</b> Dubia ad malam (memerlukan kontrol gaya hidup seumur hidup karena sifatnya kronik).</li>
+                                <li><b>Ad functionam:</b> Dubia ad bonam apabila deteksi dini dan kendali metabolik tercapai optimal.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. PATOFISIOLOGI & EFEK DOMINO (VISUAL SUMMARY) -->
+            <section id="pathophysiology" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="border-b border-slate-200 dark:border-slate-700 pb-4">
+                    <span class="bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Pathomechanism Pathway</span>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mt-2">Ringkasan Jalur Kritis Sindrom Metabolik</h3>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-bold text-medical-600 dark:text-medical-400 text-sm">1. Pemicu Sentral</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Obesitas visceral & disfungsi jaringan adiposa melepaskan FFA tinggi serta sitokin pro-inflamasi ke sirkulasi portal.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-bold text-medical-600 dark:text-medical-400 text-sm">2. Blokade Sinyal</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Resistensi insulin menghambat jalur PI3K/Akt di otot rangka, menyebabkan kegagalan translokasi GLUT4.</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-200 dark:border-slate-700 space-y-2">
+                        <h4 class="font-bold text-medical-600 dark:text-medical-400 text-sm">3. Kerusakan Sistemik</h4>
+                        <p class="text-xs text-slate-600 dark:text-slate-300">Efek domino memicu aterosklerosis vaskular, NAFLD hepatik, hipertensi, dan peningkatan risiko kardiovaskular.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. INTERACTIVE QUIZ (10 SOAL) -->
+            <section id="quiz-section" class="bg-white dark:bg-slate-800 p-6 md:p-8 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <span class="text-medical-600 font-bold text-xs uppercase tracking-wider">Exam Simulation</span>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Latihan 10 Soal Ujian Komprehensif</h3>
+                    </div>
+                    <span id="quizScore" class="bg-medical-100 text-medical-800 dark:bg-medical-900 dark:text-medical-200 px-3 py-1 rounded-lg text-xs font-bold">Skor Total: 0 / 10</span>
+                </div>
+
+                <!-- SOAL 1 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q1">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>1.</b> Berapa kali lipat peningkatan risiko terjadinya Diabetes Melitus Tipe 2 pada pasien yang mengalami klaster faktor risiko Sindrom Metabolik?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="A" class="mr-2"> A. 2 kali lipat</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="B" class="mr-2"> B. 3 kali lipat</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="C" class="mr-2"> C. 5 kali lipat</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q1" value="D" class="mr-2"> D. 10 kali lipat</label>
+                    </div>
+                    <button onclick="checkSingle(1, 'C')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-1" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 2 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q2">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>2.</b> Manakah konsensus diagnosis Sindrom Metabolik yang mewajibkan adanya resistensi insulin sebagai syarat mutlak (mandatory)?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="A" class="mr-2"> A. WHO (1998)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="B" class="mr-2"> B. NCEP ATP III (2001)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="C" class="mr-2"> C. IDF (2005)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q2" value="D" class="mr-2"> D. ADA (American Diabetes Association)</label>
+                    </div>
+                    <button onclick="checkSingle(2, 'A')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-2" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 3 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q3">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>3.</b> Jalur transduksi sinyal intraseluler manakah yang terhambat pada otot rangka sehingga menyebabkan kegagalan translokasi GLUT4 pada resistensi insulin?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="A" class="mr-2"> A. Jalur AMP/PKA</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="B" class="mr-2"> B. Jalur PI3K/Akt</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="C" class="mr-2"> C. Jalur JAK/STAT</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q3" value="D" class="mr-2"> D. Jalur MAPK/ERK</label>
+                    </div>
+                    <button onclick="checkSingle(3, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-3" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 4 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q4">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>4.</b> Berdasarkan data demografi, kelompok manakah di Indonesia yang menunjukkan prevalensi tertinggi Sindrom Metabolik dengan penggerak utama obesitas abdominal?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="A" class="mr-2"> A. Pria Indonesia</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="B" class="mr-2"> B. Wanita Indonesia (46.2%)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="C" class="mr-2"> C. Pria Belanda</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q4" value="D" class="mr-2"> D. Wanita Belanda</label>
+                    </div>
+                    <button onclick="checkSingle(4, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-4" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 5 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q5">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>5.</b> Sitokin pro-inflamasi apa yang disekresikan oleh jaringan adiposa terdisfungsi yang berperan langsung merusak sinyal insulin?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="A" class="mr-2"> A. Adiponektin</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="B" class="mr-2"> B. TNF-alpha dan IL-6</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="C" class="mr-2"> C. Insulin-like Growth Factor 1</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q5" value="D" class="mr-2"> D. Glukagon</label>
+                    </div>
+                    <button onclick="checkSingle(5, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-5" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 6 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q6">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>6.</b> Polimorfisme genetik manakah yang secara langsung mengatur respons seluler terhadap hipoksia jaringan serta memengaruhi kerentanan stres ginjal dan kardiovaskular?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="A" class="mr-2"> A. Gen ADIPOQ</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="B" class="mr-2"> B. Gen HIF-1alpha (varian Pro582Ser)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="C" class="mr-2"> C. Gen APOA5</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q6" value="D" class="mr-2"> D. Gen LXR</label>
+                    </div>
+                    <button onclick="checkSingle(6, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-6" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 7 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q7">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>7.</b> Bagaimana konsensus IDF (2005) menentukan syarat mutlak dalam diagnosis Sindrom Metabolik?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="A" class="mr-2"> A. Wajib mengalami hipertensi derajat 2</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="B" class="mr-2"> B. Wajib mengalami obesitas sentral spesifik etnis</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="C" class="mr-2"> C. Wajib mengalami peningkatan trigliserida di atas 200 mg/dL</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q7" value="D" class="mr-2"> D. Tidak ada syarat mutlak</label>
+                    </div>
+                    <button onclick="checkSingle(7, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-7" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 8 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q8">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>8.</b> Apa akibat langsung dari hambatan nitrat oksida (NO) pada sistem kardiovaskular dalam efek domino Sindrom Metabolik?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="A" class="mr-2"> A. Vasodilasi perifer masif dan hipotensi</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="B" class="mr-2"> B. Vasokonstriksi yang memicu hipertensi</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="C" class="mr-2"> C. Peningkatan elastisitas pembuluh darah</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q8" value="D" class="mr-2"> D. Penurunan kadar kolesterol LDL secara drastis</label>
+                    </div>
+                    <button onclick="checkSingle(8, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-8" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 9 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q9">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>9.</b> Kondisi hepatik apa yang sering didorong oleh resistensi insulin melalui percepatan pengambilan besi hati dan stres oksidatif?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="A" class="mr-2"> A. Hepatitis Virus Akut</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="B" class="mr-2"> B. Sirosis Biliaris Primer</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="C" class="mr-2"> C. Non-Alcoholic Fatty Liver Disease (NAFLD)</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q9" value="D" class="mr-2"> D. Abses Hati amoebik</label>
+                    </div>
+                    <button onclick="checkSingle(9, 'C')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-9" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+                <!-- SOAL 10 -->
+                <div class="space-y-4 p-5 rounded-xl bg-slate-50 dark:bg-slate-700/30 border border-slate-200 dark:border-slate-700" id="box-q10">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-white">
+                        <b>10.</b> Berdasarkan kriteria konsensus NCEP ATP III (2001), berapa jumlah pilar minimum dari 5 pilar DOHHH yang harus dipenuhi untuk menegakkan diagnosis Sindrom Metabolik?
+                    </p>
+                    <div class="space-y-2 text-sm">
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="A" class="mr-2"> A. Minimal 2 pilar</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="B" class="mr-2"> B. Minimal 3 pilar</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="C" class="mr-2"> C. Harus memenuhi seluruh 5 pilar</label>
+                        <label class="block p-3 rounded-lg border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer transition"><input type="radio" name="q10" value="D" class="mr-2"> D. Cukup 1 pilar utama</label>
+                    </div>
+                    <button onclick="checkSingle(10, 'B')" class="px-4 py-2 bg-medical-600 hover:bg-medical-700 text-white font-bold text-xs rounded-lg transition shadow-sm">Periksa Jawaban</button>
+                    <div id="feedback-10" class="hidden mt-3 p-4 rounded-lg text-xs space-y-2"></div>
+                </div>
+
+            </section>
+
+            <!-- 5. QUICK REVIEW -->
+            <section id="quick-review" class="bg-gradient-to-br from-medical-600 to-medical-800 text-white p-6 md:p-8 rounded-2xl shadow-lg space-y-4">
+                <h3 class="text-xl font-bold flex items-center gap-2">If You Only Have 5 Minutes (Quick Review)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">5 Pilar DOHHH</span>
+                        <p>Obesitas Sentral, Hipertensi, Hiperglikemia, Hipertrigliseridemia, HDL Rendah.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Risiko Utama</span>
+                        <p>Risiko DM Tipe 2 naik 5x lipat & Risiko Kardiovaskular naik 2x lipat.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Patomekanisme Kunci</span>
+                        <p>Resistensi insulin menghambat jalur PI3K/Akt & translokasi GLUT4 di otot rangka.</p>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-xl backdrop-blur-sm space-y-1">
+                        <span class="font-bold block text-medical-200">Prevalensi Tertinggi</span>
+                        <p>Wanita Indonesia (46.2%), didorong oleh obesitas abdominal ekstrem.</p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-4 py-8 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 mt-12">
+        Interactive Medical Study Companion • Blok Endokrin & Metabolik • Offline Ready
+    </footer>
+
+    <!-- JavaScript Interactivity -->
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const themeToggle = document.getElementById('themeToggle');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                themeToggle.innerText = 'Mode Terang';
+            } else {
+                html.classList.add('dark');
+                themeToggle.innerText = 'Mode Gelap';
+            }
+        }
+
+        function toggleAccordion(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (el.style.display === 'none' || el.style.display === '') {
+                el.style.display = 'block';
+                icon.innerText = '^';
+            } else {
+                el.style.display = 'none';
+                icon.innerText = 'v';
+            }
+        }
+
+        let totalScore = 0;
+        const answeredState = {};
+
+        function checkSingle(qNum, correctOpt) {
+            const radios = document.getElementsByName('q' + qNum);
+            let userVal = '';
+            for (const r of radios) {
+                if (r.checked) userVal = r.value;
+            }
+
+            const feedback = document.getElementById('feedback-' + qNum);
+            feedback.classList.remove('hidden');
+
+            if (!userVal) {
+                feedback.className = "mt-3 p-4 rounded-lg text-xs bg-amber-50 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200";
+                feedback.innerHTML = "Silakan pilih salah satu opsi jawaban terlebih dahulu.";
+                return;
+            }
+
+            if (!answeredState[qNum]) {
+                answeredState[qNum] = true;
+                if (userVal === correctOpt) {
+                    totalScore++;
+                    feedback.className = "mt-3 p-4 rounded-lg text-xs bg-emerald-50 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-200 border border-emerald-200";
+                    feedback.innerHTML = "<b>BENAR!</b><br>Jawaban Anda sudah tepat dan sesuai dengan konsep klinis.";
+                } else {
+                    feedback.className = "mt-3 p-4 rounded-lg text-xs bg-rose-50 text-rose-800 dark:bg-rose-900/40 dark:text-rose-200 border border-rose-200";
+                    feedback.innerHTML = "<b>KURANG TEPAT.</b> Jawaban yang benar adalah opsi <b>" + correctOpt + "</b>.";
+                }
+                document.getElementById('quizScore').innerText = "Skor Total: " + totalScore + " / 10";
+            }
+        }
+
+        window.addEventListener('scroll', function() {
+            const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            document.getElementById('progressText').innerText = Math.round(scrolled) + '%';
+        });
+
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const sections = document.querySelectorAll('.searchable-content > section');
+            sections.forEach(function(sec) {
+                const text = sec.innerText.toLowerCase();
+                if (text.includes(term) || term === '') {
+                    sec.style.display = '';
+                } else {
+                    sec.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
